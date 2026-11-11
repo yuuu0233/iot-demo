@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT 温度发布台</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glow glow-a"></div>
+    <div class="glow glow-b"></div>
+
+    <header class="topbar">
+        <div class="brand">
+            <div class="logo">IoT</div>
+            <div>
+                <h1>温度发布台</h1>
+                <p class="sub">
+                    <span id="topic">iot/demo/temperature</span>
+                    <span class="sep">·</span>
+                    <span id="broker">mqtt://127.0.0.1:1883</span>
+                </p>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="badges">
+                <span class="badge off" id="connBadge"><i class="dot"></i><span id="connText">连接中…</span></span>
+                <span class="badge off" id="runBadge"><i class="dot"></i><span id="runText">已暂停</span></span>
+            </div>
+            <button class="btn primary" id="toggleBtn" type="button">开始发布</button>
+        </div>
+    </header>
+
+    <main class="grid">
+        <section class="card current">
+            <div class="card-head">
+                <h2>当前温度</h2>
+                <span class="muted" id="updatedAt">等待数据…</span>
+            </div>
+            <div class="reading">
+                <span id="temp">--.--</span>
+                <span class="unit">℃</span>
+            </div>
+            <div class="stats">
+                <div class="stat"><span class="label">发布条数</span><strong id="statCount">0</strong></div>
+                <div class="stat"><span class="label">平均温度</span><strong id="statAvg">--</strong></div>
+                <div class="stat"><span class="label">最低</span><strong id="statMin">--</strong></div>
+                <div class="stat"><span class="label">最高</span><strong id="statMax">--</strong></div>
+            </div>
+        </section>
+
+        <section class="card control">
+            <div class="card-head">
+                <h2>发布控制</h2>
+                <span class="muted">实时生效</span>
+            </div>
+            <form id="configForm" class="form">
+                <label class="field">
+                    <span>发布间隔（ms）</span>
+                    <input type="number" id="intervalInput" min="500" max="60000" step="500" required>
+                </label>
+                <div class="row">
+                    <label class="field">
+                        <span>温度下限（℃）</span>
+                        <input type="number" id="minInput" min="-50" max="100" step="0.5" required>
+                    </label>
+                    <label class="field">
+                        <span>温度上限（℃）</span>
+                        <input type="number" id="maxInput" min="-50" max="100" step="0.5" required>
+                    </label>
+                </div>
+                <button class="btn ghost" type="submit">应用配置</button>
+                <p class="hint" id="formHint"></p>
+            </form>
+        </section>
+
+        <section class="card chart-card">
+            <div class="card-head">
+                <h2>温度趋势</h2>
+                <span class="muted">最近 60 条 · 实时刷新</span>
+            </div>
+            <div class="chart-wrap">
+                <canvas id="chart"></canvas>
+            </div>
+        </section>
+
+        <section class="card log-card">
+            <div class="card-head">
+                <h2>发布日志</h2>
+                <span class="muted">最近 50 条</span>
+            </div>
+            <ul class="logs" id="logs"></ul>
+        </section>
+    </main>
+
+    <footer class="footer">Express + MQTT · 温度数据通过 SSE 实时推送</footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -4,14 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "sub":"node subscriber.js"
-    "pub":"node publisher.js" },
+    "start": "node server.js",
+    "sub": "node subscriber.js",
+    "pub": "node publisher.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
     "dotenv": "^18.0.8",
+    "express": "^4.22.3",
     "mqtt": "^5.16.1"
   }
 }
