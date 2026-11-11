@@ -1,0 +1,29 @@
+require('dotenv').config();
+const mqtt = require('mqtt');
+
+const client = mqtt.connect(process.env.MQTT_URL, {
+  username: process.env.MQTT_USERNAME || undefined,
+  password: process.env.MQTT_PASSWORD || undefined
+});
+const topic = process.env.TOPIC;
+
+client.on('connect', () => {
+  console.log("✅ publisher 连上MQTT Broker");
+  setInterval(()=>{
+    const tempValue = (20 + Math.random()*10).toFixed(2);
+    const payload = JSON.stringify({
+      device:"sensor01",
+      temperature: tempValue,
+      time: new Date().toLocaleTimeString()
+    })
+    client.publish(topic, payload, {qos:0}, (err)=>{
+      if(!err){
+        console.log(`📤 发布 -> ${topic}  内容：${payload}`)
+      }
+    })
+  },3000)
+})
+
+client.on('error', (err)=>{
+  console.error("❌ publisher 错误：",err)
+})

@@ -1,0 +1,25 @@
+require('dotenv').config();
+const mqtt = require('mqtt');
+
+const client = mqtt.connect(process.env.MQTT_URL,{
+  username: process.env.MQTT_USERNAME || undefined,
+  password: process.env.MQTT_PASSWORD || undefined
+})
+const topic = process.env.TOPIC;
+
+client.on('connect', ()=>{
+  console.log("✅ subscriber 连上MQTT Broker");
+  client.subscribe(topic, {qos:0}, (err)=>{
+    if(err) console.error("❌ 订阅失败",err);
+    else console.log(`📡 订阅主题成功：${topic}`)
+  })
+})
+
+client.on('message', (recvTopic, payloadBuffer)=>{
+  const msg = payloadBuffer.toString();
+  console.log(`📥 收到消息，主题：${recvTopic}，报文内容：${msg}`)
+})
+
+client.on('error', (err)=>{
+  console.error("❌ subscriber 报错：",err)
+})
